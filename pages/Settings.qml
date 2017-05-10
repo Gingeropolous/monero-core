@@ -40,7 +40,6 @@ import moneroComponents.Clipboard 1.0
 Rectangle {
     property var daemonAddress
     property bool viewOnly: false
-    id: page
 
     color: "#F0EEEE"
 
@@ -55,15 +54,12 @@ Rectangle {
         // try connecting to daemon
     }
 
+
     ColumnLayout {
         id: mainLayout
-<<<<<<< HEAD
-        anchors.margins: 17
-=======
         anchors.leftMargin: 40
         anchors.rightMargin: 40
         anchors.topMargin: 20
->>>>>>> c08feef681d96f9b47b8bbf8625f214c9ce7c97b
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.right: parent.right
@@ -87,8 +83,7 @@ Rectangle {
             color: "#DEDEDE"
         }
 
-        GridLayout {
-            columns: (isMobile)? 2 : 3
+        RowLayout {
             StandardButton {
                 id: closeWalletButton
                 text: qsTr("Close wallet") + translationManager.emptyString
@@ -123,48 +118,11 @@ Rectangle {
                 shadowPressedColor: "#B32D00"
                 releasedColor: "#FF6C3C"
                 pressedColor: "#FF4304"
-                text: qsTr("Show seed & keys") + translationManager.emptyString
+                text: qsTr("Show seed") + translationManager.emptyString
                 onClicked: {
                     settingsPasswordDialog.open();
                 }
             }
-
-
-/*          Rescan cache - Disabled until we know it's needed
-
-            StandardButton {
-                id: rescanWalletbutton
-                shadowReleasedColor: "#FF4304"
-                shadowPressedColor: "#B32D00"
-                releasedColor: "#FF6C3C"
-                pressedColor: "#FF4304"
-                text: qsTr("Rescan wallet cache") + translationManager.emptyString
-                onClicked: {
-                    // Show confirmation dialog
-                    confirmationDialog.title = qsTr("Rescan wallet cache") + translationManager.emptyString;
-                    confirmationDialog.text  = qsTr("Are you sure you want to rebuild the wallet cache?\n"
-                                                    + "The following information will be deleted\n"
-                                                    + "- Recipient addresses\n"
-                                                    + "- Tx keys\n"
-                                                    + "- Tx descriptions\n\n"
-                                                    + "The old wallet cache file will be renamed and can be restored later.\n"
-                                                    );
-                    confirmationDialog.icon = StandardIcon.Question
-                    confirmationDialog.cancelText = qsTr("Cancel")
-                    confirmationDialog.onAcceptedCallback = function() {
-                        walletManager.closeWallet();
-                        walletManager.clearWalletCache(persistentSettings.wallet_path);
-                        walletManager.openWalletAsync(persistentSettings.wallet_path, appWindow.password,
-                                                          persistentSettings.testnet);
-                    }
-
-                    confirmationDialog.onRejectedCallback = null;
-
-                    confirmationDialog.open()
-
-                }
-            }
-*/
         }
 
         //! Manage daemon
@@ -191,9 +149,10 @@ Rectangle {
             color: "#DEDEDE"
         }
 
-        GridLayout {
+        RowLayout {
             id: daemonStatusRow
-            columns: (isMobile) ?  2 : 4
+            Layout.fillWidth: true
+
             StandardButton {
                 visible: !appWindow.daemonRunning
                 id: startDaemonButton
@@ -267,13 +226,9 @@ Rectangle {
             }
         }
 
-<<<<<<< HEAD
-        ColumnLayout {
-=======
 
         RowLayout {
             visible: daemonAdvanced.checked
->>>>>>> c08feef681d96f9b47b8bbf8625f214c9ce7c97b
             id: daemonFlagsRow
             Label {
                 id: daemonFlagsLabel
@@ -291,32 +246,23 @@ Rectangle {
         }
 
         RowLayout {
-<<<<<<< HEAD
-=======
             visible: daemonAdvanced.checked
             id: daemonAddrRow
->>>>>>> c08feef681d96f9b47b8bbf8625f214c9ce7c97b
             Layout.fillWidth: true
             spacing: 10
 
             Label {
                 id: daemonAddrLabel
+
                 Layout.fillWidth: true
                 color: "#4A4949"
                 text: qsTr("Daemon address") + translationManager.emptyString
                 fontSize: 16
             }
-        }
-
-        GridLayout {
-            id: daemonAddrRow
-            Layout.fillWidth: true
-            columnSpacing: 10
-            columns: (isMobile) ?  2 : 3
 
             LineEdit {
                 id: daemonAddr
-                Layout.preferredWidth:  100
+                Layout.preferredWidth:  200
                 Layout.fillWidth: true
                 text: (daemonAddress !== undefined) ? daemonAddress[0] : ""
                 placeholderText: qsTr("Hostname / IP") + translationManager.emptyString
@@ -333,12 +279,7 @@ Rectangle {
         }
 
         RowLayout {
-<<<<<<< HEAD
-            Layout.fillWidth: true
-            spacing: 10
-=======
             visible: daemonAdvanced.checked
->>>>>>> c08feef681d96f9b47b8bbf8625f214c9ce7c97b
             Label {
                 id: daemonLoginLabel
                 Layout.fillWidth: true
@@ -346,10 +287,6 @@ Rectangle {
                 text: qsTr("Login (optional)") + translationManager.emptyString
                 fontSize: 16
             }
-
-        }
-
-        RowLayout {
 
             LineEdit {
                 id: daemonUsername
@@ -378,6 +315,7 @@ Rectangle {
                 shadowPressedColor: "#B32D00"
                 releasedColor: "#FF6C3C"
                 pressedColor: "#FF4304"
+                visible: true
                 onClicked: {
                     console.log("saving daemon adress settings")
                     var newDaemon = daemonAddr.text.trim() + ":" + daemonPort.text.trim()
@@ -472,22 +410,14 @@ Rectangle {
         }
 
         // Log level
-
         RowLayout {
             Label {
+                id: logLevelLabel
                 color: "#4A4949"
                 text: qsTr("Log level") + translationManager.emptyString
                 fontSize: 16
-                anchors.topMargin: 30
-                Layout.topMargin: 30
             }
-        }
-        Rectangle {
-            Layout.fillWidth: true
-            height: 1
-            color: "#DEDEDE"
-        }
-        ColumnLayout {
+
             ComboBox {
                 id: logLevel
                 model: [0,1,2,3,4,"custom"]
@@ -570,17 +500,11 @@ Rectangle {
 
         onAccepted: {
             if(appWindow.password === settingsPasswordDialog.password){
-                seedPopup.title  = qsTr("Wallet seed & keys") + translationManager.emptyString;
-                seedPopup.text = "<b>Wallet Mnemonic seed</b> <br>" + currentWallet.seed
-                        + "<br><br> <b>" + qsTr("Secret view key") + ":</b> " + currentWallet.secretViewKey
-                        + "<br><b>" + qsTr("Public view key") + ":</b> " + currentWallet.publicViewKey
-                        + "<br><b>" + qsTr("Secret spend key") + ":</b> " + currentWallet.secretSpendKey
-                        + "<br><b>" + qsTr("Public spend key") + ":</b> " + currentWallet.publicSpendKey
-                seedPopup.open()
-                seedPopup.width = 600
-                seedPopup.height = 300
-                seedPopup.onCloseCallback = function() {
-                    seedPopup.text = ""
+                informationPopup.title  = qsTr("Wallet mnemonic seed") + translationManager.emptyString;
+                informationPopup.text = currentWallet.seed
+                informationPopup.open()
+                informationPopup.onCloseCallback = function() {
+                    informationPopup.text = ""
                 }
 
             } else {
@@ -600,39 +524,17 @@ Rectangle {
 
     }
 
-    StandardDialog {
-        id: seedPopup
-        cancelVisible: false
-        okVisible: true
-        width:600
-        height:400
-
-        property var onCloseCallback
-        onAccepted:  {
-            if (onCloseCallback) {
-                onCloseCallback()
-            }
-        }
-    }
-
     // fires on every page load
     function onPageCompleted() {
         console.log("Settings page loaded");
         initSettings();
         viewOnly = currentWallet.viewOnly;
-
-        if(typeof daemonManager != "undefined")
-            appWindow.daemonRunning =  daemonManager.running(persistentSettings.testnet)
-
-        console.log(currentWallet.seed);
+        appWindow.daemonRunning =  daemonManager.running(persistentSettings.testnet)
     }
 
     // fires only once
     Component.onCompleted: {
-        if(typeof daemonManager != "undefined")
-            daemonManager.daemonConsoleUpdated.connect(onDaemonConsoleUpdated)
-
-
+        daemonManager.daemonConsoleUpdated.connect(onDaemonConsoleUpdated)
     }
 
     function onDaemonConsoleUpdated(message){

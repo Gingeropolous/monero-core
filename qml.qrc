@@ -114,7 +114,6 @@
         <file>lang/flags/rpa.png</file>
         <file>lang/flags/russia.png</file>
         <file>lang/flags/spain.png</file>
-        <file>lang/flags/sweden.png</file>
         <file>lang/flags/taiwan.png</file>
         <file>lang/flags/uk.png</file>
         <file>lang/flags/usa.png</file>
@@ -139,11 +138,7 @@
         <file>components/DaemonConsole.qml</file>
         <file>components/QRCodeScanner.qml</file>
         <file>components/Notifier.qml</file>
-<<<<<<< HEAD
-        <file>components/MobileHeader.qml</file>
-=======
         <file>wizard/WizardDaemonSettings.qml</file>
         <file>components/RemoteNodeEdit.qml</file>
->>>>>>> c08feef681d96f9b47b8bbf8625f214c9ce7c97b
     </qresource>
 </RCC>
